@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MINI GAME 20/10/25 - S1</title>
+    <!-- Tải Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Tải Confetti Library cho hiệu ứng hoàn thành game (Mục 5) -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+    <style>
+        /* Thiết lập font Inter mặc định */
+        body {
+            font-family: 'Inter', sans-serif;
+            /* 1. Nền Gradient Động */
+            background: linear-gradient(135deg, #ffe5ec, #e0c3fc, #8ec5fc);
+            background-size: 400% 400%;
+            animation: gradientShift 12s ease infinite;
+        }
+
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        
+        /* 6. Text Gradient và Shimmer cho H1 */
+        .h1-fancy {
+            background: linear-gradient(90deg, #ec4899, #8b5cf6);
+            -webkit-background-clip: text;
+            color: transparent;
+            animation: shimmer 3s infinite linear;
+            background-size: 200% auto;
+            border: none; /* Bỏ border và nền trắng cũ để gradient nổi hơn */
+        }
+
+        @keyframes shimmer {
+          0% { background-position: 0% center; }
+          100% { background-position: 200% center; }
+        }
+
+        /* 2. Hiệu ứng xuất hiện (animation) khi đổi câu hỏi */
+        @keyframes cardAppear {
+          from {
+            opacity: 0;
+            transform: scale(0.98) rotate(0.5deg);
+          }
+          to {
+            opacity: 1;
+            transform: scale(1) rotate(0);
+          }
+        }
+        
+        .card-animate {
+            animation: cardAppear 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94); /* Dùng cubic-bezier cho mượt */
+        }
+
+        /* 3. Micro-interactions: Glassmorphism cho Card */
+        #quizCard {
+            backdrop-filter: blur(15px);
+            background: rgba(255, 255, 255, 0.75);
+            border: 1px solid rgba(255, 255, 255, 0.3); /* Viền mỏng cho glass */
+            /* Cập nhật hover effect */
+            transition: all 0.3s cubic-bezier(0.2, 0.5, 0.4, 1);
+        }
+        
+        #quizCard:hover {
+            box-shadow: 0 10px 25px rgba(255, 105, 180, 0.4); /* Glow shadow hồng */
+            transform: scale(1.02) translateY(-2px);
+        }
+
+        /* 3. Micro-interactions: Answer Fade Up */
+        @keyframes fadeUp {
+          from {
+            opacity: 0;
+            transform: translateY(10px);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
+        
+        #answerSection.visible {
+          animation: fadeUp 0.4s ease-out;
+        }
+
+        /* 4. Nút điều hướng "xịn" (Glow effect) */
+        button:hover svg {
+          filter: drop-shadow(0 0 8px rgba(236, 72, 153, 0.8)); /* Màu hồng tím nhạt glow */
+          transform: scale(1.1);
+          transition: all 0.2s ease;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col items-center justify-center p-4">
+
+    <!-- Tiêu đề chính -->
+    <h1 class="text-3xl sm:text-4xl font-extrabold text-center mb-8 p-3 rounded-xl shadow-lg h1-fancy">
+        MINI GAME 20/10/25 - S1
+    </h1>
+
+    <div class="flex items-center justify-center w-full max-w-5xl">
+        <!-- Nút chuyển câu hỏi trái (Desktop) -->
+        <button id="prevBtn" class="p-3 mx-2 hidden sm:block text-gray-700 hover:text-pink-500 disabled:opacity-30 transition duration-150" aria-label="Câu hỏi trước">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10" viewBox="0 0 20 20" fill="currentColor">
+                <path fill-rule="evenodd" d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z" clip-rule="evenodd" />
+            </svg>
+        </button>
+
+        <!-- Thẻ Câu hỏi/Trả lời Lớn (Glassmorphism + Animation) -->
+        <div id="quizCard" class="card-animate rounded-2xl shadow-2xl w-full mx-auto cursor-pointer border-4 border-pink-400 hover:shadow-pink-300 transform transition-all duration-300 p-6 sm:p-10" onclick="toggleAnswer()">
+            <div id="contentContainer">
+                <p id="questionIndex" class="text-sm font-semibold text-pink-500 mb-4"></p>
+                <p id="mainText" class="text-xl sm:text-2xl font-bold text-gray-800 text-center leading-relaxed"></p>
+                <div id="answerSection" class="mt-4 pt-4 border-t border-dashed border-gray-300 hidden">
+                    <p class="text-lg sm:text-xl font-semibold text-gray-700 mb-2">Đáp án:</p>
+                    <p id="answerText" class="text-lg sm:text-xl font-extrabold text-pink-600 text-center"></p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Nút chuyển câu hỏi phải (Desktop) -->
+        <button id="nextBtn" class="p-3 mx-2 text-pink-500 hover:text-pink-700 disabled:opacity-30 transition duration-150" aria-label="Câu hỏi tiếp theo">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10" viewBox="0 0 20 20" fill="currentColor">
+                <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd" />
+            </svg>
+        </button>
+    </div>
+    
+    <!-- Các nút điều hướng cho mobile (nằm dưới) -->
+    <div class="flex sm:hidden mt-6">
+        <button id="prevBtnMobile" class="p-3 mx-2 text-gray-700 hover:text-pink-500 disabled:opacity-30 transition duration-150" aria-label="Câu hỏi trước">
+             <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" viewBox="0 0 20 20" fill="currentColor">
+                <path fill-rule="evenodd" d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z" clip-rule="evenodd" />
+            </svg>
+        </button>
+        <button id="nextBtnMobile" class="p-3 mx-2 text-pink-500 hover:text-pink-700 disabled:opacity-30 transition duration-150" aria-label="Câu hỏi tiếp theo">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" viewBox="0 0 20 20" fill="currentColor">
+                <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd" />
+            </svg>
+        </button>
+    </div>
+
+    <!-- Hết game thông báo -->
+    <div id="completionMessage" class="hidden mt-8 text-center bg-white/70 p-6 rounded-2xl border border-pink-300 shadow-xl">
+        <p class="text-2xl font-extrabold h1-fancy mb-4">🎉 Chúc mừng! Bạn đã hoàn thành tất cả câu hỏi! 🎉</p>
+        <button id="restartBtn" class="mt-4 px-6 py-2 bg-pink-500 text-white font-semibold rounded-lg shadow-xl hover:bg-pink-600 transition duration-200 transform hover:scale-[1.05]">
+            Chơi lại từ đầu
+        </button>
+    </div>
+
+
+    <script>
+        // Dữ liệu bộ câu hỏi và trả lời
+        const quizData = [
+            {
+                question: "Ngày nào phái yếu đề cao. Ngày nào phái mạnh phải vào nấu cơm. Ngày nào phái yếu là hơn. Ngày nào phái mạnh phải luôn nịnh bà?",
+                answer: "Là ngày mùng 8 tháng 3, thêm ngày phụ nữ 20 tháng 10."
+            },
+            {
+                question: "Có một tàu điện đi về hướng nam. Gió hướng tây bắc. Vậy khói từ con tàu sẽ theo hướng nào?",
+                answer: "Tàu điện thì làm gì có khói."
+            },
+            {
+                question: "Một anh chàng hỏi tên một cô gái. Cô gái nói tên của cô cũng giống như 12 bắp ngô trong giỏ ngô này, vậy tên cô gái là gì?",
+                answer: "12 = Một tá; Tá Ngô = Tố Nga. Cô gái tên Tố Nga."
+            },
+            {
+                question: "Câu này nghĩa là gì: 1′ => 4 = 1505",
+                answer: "1 phút suy tư bằng 1 năm không ngủ."
+            },
+            {
+                question: "Có 2 người: 1 lớn, 1 bé đi lên đỉnh một quả núi. Người bé là con của người lớn, nhưng người lớn lại không phải cha của người bé, hỏi người lớn là ai?",
+                answer: "Mẹ."
+            },
+            {
+                question: "Tại sao khi bắn súng người ta lại nhắm một mắt?",
+                answer: "Nhắm 2 mắt thì sẽ không thấy đường để bắn."
+            },
+            {
+                question: "Loại nước giải khát nào chứa sắt và canxi?",
+                answer: "Cafe (ca: canxi, Fe: sắt)."
+            },
+            {
+                question: "Trong 12 con giáp, con gì nổi tiếng nhờ phụ nữ?",
+                answer: "Con dê"
+            },
+            {
+                question: "Một ly thuỷ tinh đựng đầy nước, làm thế nào để lấy nước dưới đáy ly mà không đổ nước ra ngoài?",
+                answer: "Dùng ống hút."
+            },
+            {
+                question: "Cái gì đánh cha, đánh má, đánh anh, đánh chị, đánh em?",
+                answer: "Bàn chải đánh răng."
+            },
+            {
+                question: "Nếu chỉ có một que diêm, trong một ngày mùa đông giá rét, bạn bước vào căn phòng có một cây đèn, một bếp dầu, và một bếp củi, bạn thắp gì trước tiên?",
+                answer: "Que diêm."
+            },
+            {
+                question: "Cái gì tay trái cầm được còn tay phải cầm không được?",
+                answer: "Tay phải."
+            },
+            {
+                question: "Cái gì phụ nữ thích cầm nhất của đàn ông ?",
+                answer: "Tiền lương của chồng"
+            },
+            {
+                question: "Một kẻ giết người bị kết án tử hình. Hắn ta phải chọn một trong ba căn phòng: Phòng thứ nhất lửa cháy dữ dội, Phòng thứ hai đầy những kẻ ám sát đang giương súng, và phòng thứ ba đầy sư tử nhịn đói trong ba năm. Phòng nào an toàn nhất cho hắn?",
+                answer: "Phòng 3 vì sư tử chết hết vì đói rồi."
+            },
+            {
+                question: "Cái gì Adam có 2 mà Eva chỉ có 1?",
+                answer: "Chữ “A”"
+            },
+            {
+                question: "Quốc gia nào trên thế giới không có chị em phụ nữ?",
+                answer: "Nước Anh."
+            },
+            {
+                question: "Xã đông nhất là xã nào?",
+                answer: "Xã hội."
+            },
+            {
+                question: "Khi Beckham thực hiện quả đá phạt đền, anh ta sẽ sút vào đâu?",
+                answer: "Trái banh."
+            },
+            {
+                question: "Có 1 anh chàng làm việc trong 1 tòa nhà 50 tầng, nhưng anh ta lại chỉ đi thang máy lên đến tầng 35 rồi đoạn còn lại anh ta đi thang bộ. Tại sao anh ta lại làm như vậy ?",
+                answer: "Vì cái thang máy đó không lên được tới tầng 50."
+            },
+            {
+                question: "Lịch nào dài nhất?",
+                answer: "Lịch sử."
+            },
+            {
+                question: "Cái gì người mua biết, người bán biết, người xài không bao giờ biết?",
+                answer: "Quan tài."
+            },
+            {
+                question: "Làm sao để cái cân tự cân chính nó?",
+                answer: "Lật ngược cái cân lại."
+            },
+            {
+                question: "Con trai có gì quý nhất?",
+                answer: "Ngọc trai."
+            },
+            {
+                question: "Ở đâu 30 người đàn ông và 2 người đàn bà đánh nhau tán loạn?",
+                answer: "Trên bàn cờ vua"
+            },
+            {
+                question: "Bạn có thể kể ra ba ngày liên tiếp mà không có tên là thứ hai, thứ ba, thứ tư, thứ năm, thứ sáu, thứ bảy, chủ nhật?",
+                answer: "Hôm qua, hôm nay và ngày mai."
+            },
+            {
+                question: "Có bao nhiêu chữ C trong câu sau đây: “Cơm, canh, cháo gì tớ cũng thích ăn!”",
+                answer: "1 chữ C, ở chữ “Cơm”."
+            },
+            {
+                question: "Cái gì đen khi bạn mua nó, đỏ khi dùng nó và xám xịt khi vứt nó đi?",
+                answer: "Than."
+            },
+            {
+                question: "Con gì không gáy ò ó o mà người ta vẫn gọi là gà?",
+                answer: "Gà con và gà mái."
+            },
+            {
+                question: "Có một cây cầu có trọng tải là 10 tấn, có nghĩa là nếu vượt quá trọng tải trên 10 tấn thì cây cầu sẽ sập... Vậy đố các bạn làm sao bác tài qua được cây cầu này (Không được bớt hàng ra khỏi xe)?",
+                answer: "Bác tài cứ đi qua thôi, còn xe thì ở lại."
+            },
+            {
+                question: "Cái gì con gái có, phụ nữ có chồng thì mất?",
+                answer: "Tự do"
+            },
+            {
+                question: "Con đường dài nhất là đường nào?",
+                answer: "Đường đời."
+            },
+            {
+                question: "Từ nào trong tiếng việt có 9 chữ h?",
+                answer: "Chính."
+            },
+            {
+                question: "Cơ quan quan trọng nhất của phụ nữ là gì ?",
+                answer: "Hội Liên Hiệp Phụ Nữ."
+            },
+            {
+                question: "Bệnh gì bác sỹ bó tay?",
+                answer: "Đó là bệnh… gãy tay!"
+            },
+            {
+                question: "2 con vịt đi trước 2 con vịt, 2 con vịt đi sau 2 con vịt, 2 con vịt đi giữa 2 con vịt. Hỏi có mấy con vịt?",
+                answer: "4 con vịt."
+            },
+        ];
+
+        let currentQuestionIndex = 0;
+        let isAnswerVisible = false;
+
+        const quizCard = document.getElementById('quizCard');
+        const questionIndexEl = document.getElementById('questionIndex');
+        const mainTextEl = document.getElementById('mainText');
+        const answerSectionEl = document.getElementById('answerSection');
+        const answerTextEl = document.getElementById('answerText');
+        const nextBtn = document.getElementById('nextBtn');
+        const prevBtn = document.getElementById('prevBtn');
+        const nextBtnMobile = document.getElementById('nextBtnMobile');
+        const prevBtnMobile = document.getElementById('prevBtnMobile');
+        const completionMessage = document.getElementById('completionMessage');
+        const restartBtn = document.getElementById('restartBtn');
+
+        // Hàm hiển thị câu hỏi hiện tại
+        function renderQuestion() {
+            // Ẩn thông báo hoàn thành nếu đang hiển thị
+            completionMessage.classList.add('hidden');
+            quizCard.classList.remove('hidden');
+            nextBtn.classList.remove('hidden');
+            prevBtn.classList.remove('hidden');
+            nextBtnMobile.classList.remove('hidden');
+            prevBtnMobile.classList.remove('hidden');
+
+            const currentItem = quizData[currentQuestionIndex];
+            
+            // Cập nhật chỉ số câu hỏi
+            questionIndexEl.textContent = `Câu hỏi ${currentQuestionIndex + 1} / ${quizData.length}`;
+            
+            // Luôn hiển thị câu hỏi ban đầu
+            mainTextEl.textContent = currentItem.question;
+            
+            // Ẩn đáp án và class animation
+            answerSectionEl.classList.add('hidden');
+            answerSectionEl.classList.remove('visible'); 
+            mainTextEl.classList.remove('text-gray-500'); 
+            isAnswerVisible = false;
+
+            // Cập nhật trạng thái nút Prev/Next
+            updateNavigationButtons();
+            
+            // Thêm hiệu ứng xuất hiện Card mới (Mục 2)
+            quizCard.classList.remove('card-animate');
+            // Force reflow/repaint để kích hoạt lại animation
+            void quizCard.offsetWidth; 
+            quizCard.classList.add('card-animate');
+        }
+
+        // Hàm chuyển đổi hiển thị đáp án
+        function toggleAnswer() {
+            if (currentQuestionIndex >= quizData.length) return; // Không làm gì nếu đã hoàn thành
+
+            isAnswerVisible = !isAnswerVisible;
+            const currentItem = quizData[currentQuestionIndex];
+            
+            if (isAnswerVisible) {
+                // Hiển thị đáp án (kích hoạt fadeUp CSS animation - Mục 3)
+                answerTextEl.textContent = currentItem.answer;
+                answerSectionEl.classList.remove('hidden');
+                answerSectionEl.classList.add('visible'); // Kích hoạt animation
+                mainTextEl.classList.add('text-gray-500'); // Làm mờ câu hỏi
+            } else {
+                // Ẩn đáp án (chỉ xảy ra khi click lại)
+                answerSectionEl.classList.add('hidden');
+                answerSectionEl.classList.remove('visible'); // Xóa class animation
+                mainTextEl.classList.remove('text-gray-500');
+            }
+        }
+
+        // Hàm chuyển sang câu hỏi tiếp theo
+        function nextQuestion() {
+            if (currentQuestionIndex < quizData.length - 1) {
+                currentQuestionIndex++;
+                renderQuestion();
+            } else if (currentQuestionIndex === quizData.length - 1) {
+                // Đã hết câu hỏi
+                showCompletion();
+            }
+        }
+
+        // Hàm quay lại câu hỏi trước
+        function prevQuestion() {
+            if (currentQuestionIndex > 0) {
+                currentQuestionIndex--;
+                renderQuestion();
+            }
+        }
+
+        // Hàm cập nhật trạng thái nút điều hướng
+        function updateNavigationButtons() {
+            // Nút Prev
+            const isDisabledPrev = currentQuestionIndex === 0;
+            prevBtn.disabled = isDisabledPrev;
+            prevBtnMobile.disabled = isDisabledPrev;
+
+            // Nút Next
+            const isDisabledNext = currentQuestionIndex >= quizData.length;
+            nextBtn.disabled = isDisabledNext;
+            nextBtnMobile.disabled = isDisabledNext;
+        }
+
+        // Hàm hiển thị thông báo hoàn thành (Mục 5)
+        function showCompletion() {
+            quizCard.classList.add('hidden');
+            nextBtn.classList.add('hidden');
+            prevBtn.classList.add('hidden');
+            nextBtnMobile.classList.add('hidden');
+            prevBtnMobile.classList.add('hidden');
+            completionMessage.classList.remove('hidden');
+            currentQuestionIndex = quizData.length; // Đánh dấu đã hoàn thành
+            updateNavigationButtons();
+            
+            // Kích hoạt Confetti
+            if (typeof confetti !== 'undefined') {
+                confetti({
+                    particleCount: 150,
+                    spread: 80,
+                    origin: { y: 0.6 },
+                });
+            }
+        }
+
+        // Hàm chơi lại
+        function restartGame() {
+            currentQuestionIndex = 0;
+            renderQuestion();
+        }
+
+        // Gắn sự kiện cho các nút
+        nextBtn.addEventListener('click', nextQuestion);
+        nextBtnMobile.addEventListener('click', nextQuestion);
+        prevBtn.addEventListener('click', prevQuestion);
+        prevBtnMobile.addEventListener('click', prevQuestion);
+        restartBtn.addEventListener('click', restartGame);
+
+        // Khởi tạo game khi tải trang
+        window.onload = renderQuestion;
+    </script>
+</body>
+</html>
