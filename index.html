@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- TIÊU ĐỀ ĐÃ ĐƯỢC CHỈNH SỬA CHÍNH XÁC THEO YÊU CẦU -->
     <title>MINI GAME 20/10/25 - S1</title>
     <!-- Tải Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -122,7 +123,7 @@
 </head>
 <body class="min-h-screen flex flex-col items-center justify-center p-4">
 
-    <!-- Tiêu đề chính (Cập nhật 1a: Kích thước to hơn, khoảng cách lớn hơn, thêm hiệu ứng nổi) -->
+    <!-- Tiêu đề chính (Không bị ảnh hưởng bởi thẻ <title>) -->
     <h1 class="text-5xl sm:text-6xl font-extrabold text-center mt-8 mb-12 p-3 rounded-xl shadow-lg h1-fancy floating-title">
         MINI GAME 20/10/25 - S1
     </h1>
@@ -144,7 +145,6 @@
         <!-- Thẻ Câu hỏi/Trả lời Lớn (Glassmorphism + Animation) -->
         <div id="quizCard" class="card-animate rounded-[1.5rem] shadow-2xl w-full mx-auto cursor-pointer border-4 border-pink-400 hover:shadow-pink-300 transform transition-all duration-300 p-6 sm:p-10" onclick="toggleAnswer()">
             <div id="contentContainer">
-                <!-- Xóa <p id="questionIndex"> theo yêu cầu 1b -->
                 
                 <p id="mainText" class="text-xl sm:text-2xl font-bold text-gray-800 text-center leading-relaxed"></p>
                 <div id="answerSection" class="mt-4 pt-4 border-t border-dashed border-gray-300 hidden">
@@ -166,7 +166,7 @@
     <div class="flex sm:hidden mt-6">
         <button id="prevBtnMobile" class="p-3 mx-2 text-gray-700 hover:text-pink-500 disabled:opacity-30 transition duration-150" aria-label="Câu hỏi trước">
              <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" viewBox="0 0 20 20" fill="currentColor">
-                <path fill-rule="evenodd" d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z" clip-rule="evenodd" />
+                 <path fill-rule="evenodd" d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z" clip-rule="evenodd" />
             </svg>
         </button>
         <button id="nextBtnMobile" class="p-3 mx-2 text-pink-500 hover:text-pink-700 disabled:opacity-30 transition duration-150" aria-label="Câu hỏi tiếp theo">
@@ -337,7 +337,6 @@
         let isAnswerVisible = false;
 
         const quizCard = document.getElementById('quizCard');
-        // const questionIndexEl = document.getElementById('questionIndex'); // Đã xóa trong HTML
         const mainTextEl = document.getElementById('mainText');
         const answerSectionEl = document.getElementById('answerSection');
         const answerTextEl = document.getElementById('answerText');
@@ -365,16 +364,13 @@
 
             const currentItem = quizData[currentQuestionIndex];
             
-            // Xóa phần cập nhật chỉ số câu hỏi (Yêu cầu 1b)
-            // questionIndexEl.textContent = `Câu hỏi ${currentQuestionIndex + 1} / ${quizData.length}`; 
-            
-            // Cập nhật thanh tiến trình
-            const progress = ((currentQuestionIndex) / quizData.length) * 100;
-            progressFill.style.width = `${progress}%`;
-
             // Luôn hiển thị câu hỏi ban đầu
             mainTextEl.textContent = currentItem.question;
             
+            // Cập nhật thanh tiến trình (Chỉ thay đổi khi chuyển câu hỏi)
+            const progress = (currentQuestionIndex / quizData.length) * 100;
+            progressFill.style.width = `${progress}%`;
+
             // Ẩn đáp án và class animation
             answerSectionEl.classList.add('hidden');
             answerSectionEl.classList.remove('visible'); 
@@ -385,14 +381,14 @@
             // Cập nhật trạng thái nút Prev/Next
             updateNavigationButtons();
             
-            // Thêm hiệu ứng xuất hiện Card mới (Mục 2)
+            // Thêm hiệu ứng xuất hiện Card mới
             quizCard.classList.remove('card-animate');
             // Force reflow/repaint để kích hoạt lại animation
             void quizCard.offsetWidth; 
             quizCard.classList.add('card-animate');
         }
 
-        // Hàm chuyển đổi hiển thị đáp án (Thêm hiệu ứng âm thanh nhỏ)
+        // Hàm chuyển đổi hiển thị đáp án
         function toggleAnswer() {
             if (currentQuestionIndex >= quizData.length) return; // Không làm gì nếu đã hoàn thành
 
@@ -400,10 +396,7 @@
             const currentItem = quizData[currentQuestionIndex];
             
             if (isAnswerVisible) {
-                // Kích hoạt âm thanh (sử dụng Tone.js nếu được hỗ trợ, nhưng ở đây dùng cách đơn giản)
-                // Hoặc bỏ qua phần âm thanh để đơn giản hóa.
-
-                // Hiển thị đáp án (kích hoạt fadeUp CSS animation - Mục 3)
+                // Hiển thị đáp án (kích hoạt fadeUp CSS animation)
                 answerTextEl.textContent = currentItem.answer;
                 answerSectionEl.classList.remove('hidden');
                 answerSectionEl.classList.add('visible'); // Kích hoạt animation
@@ -420,12 +413,6 @@
 
         // Hàm chuyển sang câu hỏi tiếp theo
         function nextQuestion() {
-            // Cập nhật tiến trình ngay cả khi chuyển câu hỏi
-            if (currentQuestionIndex < quizData.length) {
-                const progress = ((currentQuestionIndex + 1) / quizData.length) * 100;
-                progressFill.style.width = `${progress}%`;
-            }
-
             if (currentQuestionIndex < quizData.length - 1) {
                 currentQuestionIndex++;
                 setTimeout(renderQuestion, 200); // Đợi chuyển cảnh 1 chút
@@ -433,6 +420,8 @@
                 // Đã hết câu hỏi
                 showCompletion();
             }
+            // Cập nhật trạng thái nút ngay lập tức để người dùng thấy thay đổi
+            updateNavigationButtons(); 
         }
 
         // Hàm quay lại câu hỏi trước
@@ -441,6 +430,8 @@
                 currentQuestionIndex--;
                 setTimeout(renderQuestion, 200); // Đợi chuyển cảnh 1 chút
             }
+            // Cập nhật trạng thái nút ngay lập tức để người dùng thấy thay đổi
+            updateNavigationButtons();
         }
 
         // Hàm cập nhật trạng thái nút điều hướng
@@ -451,6 +442,7 @@
             prevBtnMobile.disabled = isDisabledPrev;
 
             // Nút Next
+            // Vô hiệu hóa nút Next nếu đã ở trang hoàn thành (index = length)
             const isDisabledNext = currentQuestionIndex >= quizData.length;
             nextBtn.disabled = isDisabledNext;
             nextBtnMobile.disabled = isDisabledNext;
@@ -458,12 +450,17 @@
 
         // Hàm hiển thị thông báo hoàn thành (Nâng cấp Confetti)
         function showCompletion() {
+            // Đảm bảo thanh tiến trình đạt 100% trước khi ẩn
+            progressFill.style.width = '100%';
+            
+            // Ẩn các yếu tố game
             quizCard.classList.add('hidden');
             nextBtn.classList.add('hidden');
             prevBtn.classList.add('hidden');
             nextBtnMobile.classList.add('hidden');
             prevBtnMobile.classList.add('hidden');
-            progressBar.classList.add('hidden'); // Ẩn thanh tiến trình khi hoàn thành
+            progressBar.classList.add('hidden'); 
+            
             completionMessage.classList.remove('hidden');
             currentQuestionIndex = quizData.length; // Đánh dấu đã hoàn thành
             updateNavigationButtons();
@@ -525,4 +522,3 @@
     </script>
 </body>
 </html>
-
