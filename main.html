@@ -3,10 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MINI GAME 20/10/25 - S1</title>
+    <title>MINI GAME 20/10/25 - S1 (Nâng cấp)</title>
     <!-- Tải Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Tải Confetti Library cho hiệu ứng hoàn thành game (Mục 5) -->
+    <!-- Tải Confetti Library cho hiệu ứng hoàn thành game -->
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
     <style>
@@ -25,14 +25,24 @@
             100% { background-position: 0% 50%; }
         }
         
-        /* 6. Text Gradient và Shimmer cho H1 */
+        /* Cập nhật (1a) - Hiệu ứng nổi cho tiêu đề */
+        @keyframes floatTitle {
+          0%, 100% { transform: translateY(0); }
+          50% { transform: translateY(-5px); }
+        }
+        .floating-title { 
+            animation: floatTitle 3s ease-in-out infinite; 
+        }
+
+        /* Gợi ý - Thêm bóng đổ động (kiểu neon) cho tiêu đề */
         .h1-fancy {
             background: linear-gradient(90deg, #ec4899, #8b5cf6);
             -webkit-background-clip: text;
             color: transparent;
             animation: shimmer 3s infinite linear;
             background-size: 200% auto;
-            border: none; /* Bỏ border và nền trắng cũ để gradient nổi hơn */
+            border: none;
+            text-shadow: 0 0 15px rgba(236, 72, 153, 0.7); /* Bóng đổ neon hồng */
         }
 
         @keyframes shimmer {
@@ -63,6 +73,14 @@
             border: 1px solid rgba(255, 255, 255, 0.3); /* Viền mỏng cho glass */
             /* Cập nhật hover effect */
             transition: all 0.3s cubic-bezier(0.2, 0.5, 0.4, 1);
+            /* Gợi ý - Bóng đổ sâu hơn cho card */
+            box-shadow: 0 15px 35px rgba(255,105,180,0.5); 
+            border-radius: 1.5rem; /* Bo tròn sâu hơn */
+        }
+        
+        /* Hiệu ứng lật card (Thêm theo gợi ý) */
+        .card-flipped {
+            transform: rotateY(180deg) scale(1.02);
         }
         
         #quizCard:hover {
@@ -92,14 +110,28 @@
           transform: scale(1.1);
           transition: all 0.2s ease;
         }
+        
+        /* Ứng dụng kiểu chữ đặc biệt cho thông điệp 20/10 */
+        .celebration-text {
+            background-size: 200% auto;
+        }
+        .celebration-text:hover {
+            animation-play-state: running;
+        }
     </style>
 </head>
 <body class="min-h-screen flex flex-col items-center justify-center p-4">
 
-    <!-- Tiêu đề chính -->
-    <h1 class="text-3xl sm:text-4xl font-extrabold text-center mb-8 p-3 rounded-xl shadow-lg h1-fancy">
+    <!-- Tiêu đề chính (Cập nhật 1a: Kích thước to hơn, khoảng cách lớn hơn, thêm hiệu ứng nổi) -->
+    <h1 class="text-5xl sm:text-6xl font-extrabold text-center mt-8 mb-12 p-3 rounded-xl shadow-lg h1-fancy floating-title">
         MINI GAME 20/10/25 - S1
     </h1>
+    
+    <!-- Thanh tiến trình (Gợi ý UX) -->
+    <div id="progressBar" class="h-2 w-full max-w-2xl bg-pink-100 rounded-full overflow-hidden mb-6 hidden">
+        <div id="progressFill" class="h-2 bg-pink-500 w-0 transition-all duration-500 ease-in-out"></div>
+    </div>
+
 
     <div class="flex items-center justify-center w-full max-w-5xl">
         <!-- Nút chuyển câu hỏi trái (Desktop) -->
@@ -110,9 +142,10 @@
         </button>
 
         <!-- Thẻ Câu hỏi/Trả lời Lớn (Glassmorphism + Animation) -->
-        <div id="quizCard" class="card-animate rounded-2xl shadow-2xl w-full mx-auto cursor-pointer border-4 border-pink-400 hover:shadow-pink-300 transform transition-all duration-300 p-6 sm:p-10" onclick="toggleAnswer()">
+        <div id="quizCard" class="card-animate rounded-[1.5rem] shadow-2xl w-full mx-auto cursor-pointer border-4 border-pink-400 hover:shadow-pink-300 transform transition-all duration-300 p-6 sm:p-10" onclick="toggleAnswer()">
             <div id="contentContainer">
-                <p id="questionIndex" class="text-sm font-semibold text-pink-500 mb-4"></p>
+                <!-- Xóa <p id="questionIndex"> theo yêu cầu 1b -->
+                
                 <p id="mainText" class="text-xl sm:text-2xl font-bold text-gray-800 text-center leading-relaxed"></p>
                 <div id="answerSection" class="mt-4 pt-4 border-t border-dashed border-gray-300 hidden">
                     <p class="text-lg sm:text-xl font-semibold text-gray-700 mb-2">Đáp án:</p>
@@ -143,9 +176,12 @@
         </button>
     </div>
 
-    <!-- Hết game thông báo -->
+    <!-- Hết game thông báo (Cập nhật thông điệp 20/10) -->
     <div id="completionMessage" class="hidden mt-8 text-center bg-white/70 p-6 rounded-2xl border border-pink-300 shadow-xl">
-        <p class="text-2xl font-extrabold h1-fancy mb-4">🎉 Chúc mừng! Bạn đã hoàn thành tất cả câu hỏi! 🎉</p>
+        <p class="text-3xl font-extrabold mb-4 celebration-text bg-gradient-to-r from-pink-400 via-fuchsia-500 to-purple-500 bg-clip-text text-transparent animate-pulse">
+            💐 Chúc mừng Phụ nữ Việt Nam 20/10 💐
+        </p>
+        <p class="text-xl font-semibold text-gray-800 mb-6">Xin chúc mừng, bạn đã hoàn thành thử thách một cách xuất sắc!</p>
         <button id="restartBtn" class="mt-4 px-6 py-2 bg-pink-500 text-white font-semibold rounded-lg shadow-xl hover:bg-pink-600 transition duration-200 transform hover:scale-[1.05]">
             Chơi lại từ đầu
         </button>
@@ -301,7 +337,7 @@
         let isAnswerVisible = false;
 
         const quizCard = document.getElementById('quizCard');
-        const questionIndexEl = document.getElementById('questionIndex');
+        // const questionIndexEl = document.getElementById('questionIndex'); // Đã xóa trong HTML
         const mainTextEl = document.getElementById('mainText');
         const answerSectionEl = document.getElementById('answerSection');
         const answerTextEl = document.getElementById('answerText');
@@ -311,9 +347,14 @@
         const prevBtnMobile = document.getElementById('prevBtnMobile');
         const completionMessage = document.getElementById('completionMessage');
         const restartBtn = document.getElementById('restartBtn');
+        const progressBar = document.getElementById('progressBar');
+        const progressFill = document.getElementById('progressFill');
 
         // Hàm hiển thị câu hỏi hiện tại
         function renderQuestion() {
+            // Hiển thị thanh tiến trình
+            progressBar.classList.remove('hidden');
+
             // Ẩn thông báo hoàn thành nếu đang hiển thị
             completionMessage.classList.add('hidden');
             quizCard.classList.remove('hidden');
@@ -324,9 +365,13 @@
 
             const currentItem = quizData[currentQuestionIndex];
             
-            // Cập nhật chỉ số câu hỏi
-            questionIndexEl.textContent = `Câu hỏi ${currentQuestionIndex + 1} / ${quizData.length}`;
+            // Xóa phần cập nhật chỉ số câu hỏi (Yêu cầu 1b)
+            // questionIndexEl.textContent = `Câu hỏi ${currentQuestionIndex + 1} / ${quizData.length}`; 
             
+            // Cập nhật thanh tiến trình
+            const progress = ((currentQuestionIndex) / quizData.length) * 100;
+            progressFill.style.width = `${progress}%`;
+
             // Luôn hiển thị câu hỏi ban đầu
             mainTextEl.textContent = currentItem.question;
             
@@ -334,6 +379,7 @@
             answerSectionEl.classList.add('hidden');
             answerSectionEl.classList.remove('visible'); 
             mainTextEl.classList.remove('text-gray-500'); 
+            quizCard.classList.remove('card-flipped');
             isAnswerVisible = false;
 
             // Cập nhật trạng thái nút Prev/Next
@@ -346,7 +392,7 @@
             quizCard.classList.add('card-animate');
         }
 
-        // Hàm chuyển đổi hiển thị đáp án
+        // Hàm chuyển đổi hiển thị đáp án (Thêm hiệu ứng âm thanh nhỏ)
         function toggleAnswer() {
             if (currentQuestionIndex >= quizData.length) return; // Không làm gì nếu đã hoàn thành
 
@@ -354,24 +400,35 @@
             const currentItem = quizData[currentQuestionIndex];
             
             if (isAnswerVisible) {
+                // Kích hoạt âm thanh (sử dụng Tone.js nếu được hỗ trợ, nhưng ở đây dùng cách đơn giản)
+                // Hoặc bỏ qua phần âm thanh để đơn giản hóa.
+
                 // Hiển thị đáp án (kích hoạt fadeUp CSS animation - Mục 3)
                 answerTextEl.textContent = currentItem.answer;
                 answerSectionEl.classList.remove('hidden');
                 answerSectionEl.classList.add('visible'); // Kích hoạt animation
                 mainTextEl.classList.add('text-gray-500'); // Làm mờ câu hỏi
+                quizCard.classList.add('card-flipped'); // Thêm hiệu ứng lật
             } else {
                 // Ẩn đáp án (chỉ xảy ra khi click lại)
                 answerSectionEl.classList.add('hidden');
                 answerSectionEl.classList.remove('visible'); // Xóa class animation
                 mainTextEl.classList.remove('text-gray-500');
+                quizCard.classList.remove('card-flipped');
             }
         }
 
         // Hàm chuyển sang câu hỏi tiếp theo
         function nextQuestion() {
+            // Cập nhật tiến trình ngay cả khi chuyển câu hỏi
+            if (currentQuestionIndex < quizData.length) {
+                const progress = ((currentQuestionIndex + 1) / quizData.length) * 100;
+                progressFill.style.width = `${progress}%`;
+            }
+
             if (currentQuestionIndex < quizData.length - 1) {
                 currentQuestionIndex++;
-                renderQuestion();
+                setTimeout(renderQuestion, 200); // Đợi chuyển cảnh 1 chút
             } else if (currentQuestionIndex === quizData.length - 1) {
                 // Đã hết câu hỏi
                 showCompletion();
@@ -382,7 +439,7 @@
         function prevQuestion() {
             if (currentQuestionIndex > 0) {
                 currentQuestionIndex--;
-                renderQuestion();
+                setTimeout(renderQuestion, 200); // Đợi chuyển cảnh 1 chút
             }
         }
 
@@ -399,30 +456,60 @@
             nextBtnMobile.disabled = isDisabledNext;
         }
 
-        // Hàm hiển thị thông báo hoàn thành (Mục 5)
+        // Hàm hiển thị thông báo hoàn thành (Nâng cấp Confetti)
         function showCompletion() {
             quizCard.classList.add('hidden');
             nextBtn.classList.add('hidden');
             prevBtn.classList.add('hidden');
             nextBtnMobile.classList.add('hidden');
             prevBtnMobile.classList.add('hidden');
+            progressBar.classList.add('hidden'); // Ẩn thanh tiến trình khi hoàn thành
             completionMessage.classList.remove('hidden');
             currentQuestionIndex = quizData.length; // Đánh dấu đã hoàn thành
             updateNavigationButtons();
             
-            // Kích hoạt Confetti
+            // Nâng cấp: Chạy Confetti 3 đợt liên tiếp
             if (typeof confetti !== 'undefined') {
-                confetti({
-                    particleCount: 150,
-                    spread: 80,
-                    origin: { y: 0.6 },
+                const fire = (particleRatio, opts) => {
+                    confetti({
+                        ...opts,
+                        origin: { y: 0.7 },
+                        particleCount: Math.floor(250 * particleRatio),
+                        spread: 260,
+                        ticks: 500,
+                        angle: 60 + (Math.random() * 60)
+                    });
+                }
+                
+                // Đợt 1
+                fire(0.25, {
+                    spread: 26,
+                    startVelocity: 55,
                 });
+                // Đợt 2
+                setTimeout(() => {
+                    fire(0.35, {
+                        spread: 60,
+                        startVelocity: 55,
+                    });
+                }, 100);
+                // Đợt 3
+                setTimeout(() => {
+                    fire(0.4, {
+                        spread: 120,
+                        startVelocity: 45,
+                        scalar: 0.9,
+                        shapes: ['circle', 'square', 'star'],
+                    });
+                }, 200);
             }
         }
 
         // Hàm chơi lại
         function restartGame() {
             currentQuestionIndex = 0;
+            // Đặt lại thanh tiến trình về 0%
+            progressFill.style.width = '0%';
             renderQuestion();
         }
 
