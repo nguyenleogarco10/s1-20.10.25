@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!-- TIÊU ĐỀ ĐÃ ĐƯỢC CHỈNH SỬA CHÍNH XÁC THEO YÊU CẦU -->
-    <title>MINI GAME 20/10/25 - S1</title>
+    <title>Mini Game Gala Dinner Big Sales 1&2</title>
     <!-- Tải Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Tải Confetti Library cho hiệu ứng hoàn thành game -->
@@ -123,12 +123,12 @@
 </head>
 <body class="min-h-screen flex flex-col items-center justify-center p-4">
 
-    <!-- Tiêu đề chính (Không bị ảnh hưởng bởi thẻ <title>) -->
+    <!-- Tiêu đề chính -->
     <h1 class="text-5xl sm:text-6xl font-extrabold text-center mt-8 mb-12 p-3 rounded-xl shadow-lg h1-fancy floating-title">
-        MINI GAME 20/10/25 - S1
+        Tuyển Tập Câu Đố Mẹo và Dân Gian
     </h1>
     
-    <!-- Thanh tiến trình (Gợi ý UX) -->
+    <!-- Thanh tiến trình -->
     <div id="progressBar" class="h-2 w-full max-w-2xl bg-pink-100 rounded-full overflow-hidden mb-6 hidden">
         <div id="progressFill" class="h-2 bg-pink-500 w-0 transition-all duration-500 ease-in-out"></div>
     </div>
@@ -189,147 +189,667 @@
 
 
     <script>
-        // Dữ liệu bộ câu hỏi và trả lời
+        // Dữ liệu bộ câu hỏi và trả lời MỚI
         const quizData = [
             {
-                question: "Ngày nào phái yếu đề cao. Ngày nào phái mạnh phải vào nấu cơm. Ngày nào phái yếu là hơn. Ngày nào phái mạnh phải luôn nịnh bà?",
-                answer: "Là ngày mùng 8 tháng 3, thêm ngày phụ nữ 20 tháng 10."
+                question: "Cái gì có bốn chân, một lưng nhưng không có cơ thể?",
+                answer: "Cái bàn"
             },
             {
-                question: "Có một tàu điện đi về hướng nam. Gió hướng tây bắc. Vậy khói từ con tàu sẽ theo hướng nào?",
-                answer: "Tàu điện thì làm gì có khói."
+                question: "Đôi gì tách ra thì vô dụng?",
+                answer: "Đôi đũa"
             },
             {
-                question: "Một anh chàng hỏi tên một cô gái. Cô gái nói tên của cô cũng giống như 12 bắp ngô trong giỏ ngô này, vậy tên cô gái là gì?",
-                answer: "12 = Một tá; Tá Ngô = Tố Nga. Cô gái tên Tố Nga."
+                question: "Cái gì che mưa, che nắng, cầm tay?",
+                answer: "Cái ô"
             },
             {
-                question: "Câu này nghĩa là gì: 1′ => 4 = 1505",
-                answer: "1 phút suy tư bằng 1 năm không nằm."
+                question: "Cái gì có răng nhưng không nhai được?",
+                answer: "Cái lược"
             },
             {
-                question: "Có 2 người: 1 lớn, 1 bé đi lên đỉnh một quả núi. Người bé là con của người lớn, nhưng người lớn lại không phải cha của người bé, hỏi người lớn là ai?",
-                answer: "Mẹ."
+                question: "Cái gì có cánh nhưng không bay?",
+                answer: "Cánh cửa"
+            },
+            {
+                question: "Cái gì có miệng nhưng không nói?",
+                answer: "Miệng chén"
+            },
+            {
+                question: "Cái gì có tai nhưng không nghe được?",
+                answer: "Tai nồi"
+            },
+            {
+                question: "Cái gì chở người, chạy nhanh, không cần xăng?",
+                answer: "Xe đạp"
+            },
+            {
+                question: "Cái gì có lông nhưng không ấm?",
+                answer: "Bút lông"
+            },
+            {
+                question: "Cái gì bay cao, có dây kéo, trẻ em thích?",
+                answer: "Diều"
+            },
+            {
+                question: "Cái gì làm bạn ấm áp nhưng không mua hay cầm được?",
+                answer: "Cái ôm"
+            },
+            {
+                question: "Cái gì không tay nhưng chỉ đường?",
+                answer: "Miệng"
+            },
+            {
+                question: "Cái gì gọi là đồng tiền nhưng không tiêu được?",
+                answer: "Má lúm đồng tiền"
+            },
+            {
+                question: "Con gì nhỏ mà hát to?",
+                answer: "Con dế"
+            },
+            {
+                question: "Con gì thích nhảy dù không có dù?",
+                answer: "Con ếch"
+            },
+            {
+                question: "Con gì có râu, kêu meo, bắt chuột giỏi?",
+                answer: "Con mèo"
+            },
+            {
+                question: "Con gì đi đâu cũng mang nhà theo?",
+                answer: "Con ốc"
+            },
+            {
+                question: "Con gì có cánh mà không bay cao?",
+                answer: "Con gà"
+            },
+            {
+                question: "Con gì thích ngủ ngày, thức đêm?",
+                answer: "Con cú"
+            },
+            {
+                question: "Con có lưỡi dài, bắt mồi nhanh?",
+                answer: "Con tắc kè"
+            },
+            {
+                question: "Cái gì càng lấy đi càng nhiều thêm?",
+                answer: "Cái hố"
+            },
+            {
+                question: "Cái gì càng khô càng ướt?",
+                answer: "Khăn lau"
+            },
+            {
+                question: "Cái gì càng nhanh thì càng chậm?",
+                answer: "Đồng hồ"
+            },
+            {
+                question: "Cái gì không đi mà đến?",
+                answer: "Tuổi tác"
+            },
+            {
+                question: "Cái gì không có chân mà chạy?",
+                answer: "Thời gian"
+            },
+            {
+                question: "Cái gì không có miệng mà kể chuyện?",
+                answer: "Sách"
+            },
+            {
+                question: "Cái gì không có mắt mà khóc?",
+                answer: "Mưa"
+            },
+            {
+                question: "Cái gì càng ít thì càng thấy?",
+                answer: "Sao trời"
+            },
+            {
+                question: "Cái gì càng dài thì càng ngắn?",
+                answer: "Thuốc lá"
+            },
+            {
+                question: "Cái gì càng chia càng nhiều?",
+                answer: "Tình yêu"
+            },
+            {
+                question: "Cái gì bạn luôn mang theo nhưng chưa từng thấy?",
+                answer: "Tuổi tác"
+            },
+            {
+                question: "Tôi có mặt vào buổi sáng và mất đi vào buổi tối, nhưng luôn ở đó suốt ngày. Đó là gì?",
+                answer: "Bóng đèn"
+            },
+            {
+                question: "Tôi là một con số từ 1 đến 10, nếu bạn bỏ đi một chữ số thì tôi trở thành số nửa. Tôi là con số gì?",
+                answer: "Số 9"
+            },
+            {
+                question: "Cái gì có thể được làm lớn hơn bằng cách bỏ đi một phần của nó?",
+                answer: "Lỗ hổng"
+            },
+            {
+                question: "Tôi có cánh nhưng không bay, tôi có thể thảo luận nhưng không nói chuyện. Tôi là gì?",
+                answer: "Sách"
+            },
+            {
+                question: "Có một cái tủ đầy đồ và không có cánh cửa, nhưng lại có rất nhiều người mở và đóng nó. Đó là cái gì?",
+                answer: "Điện thoại di động"
+            },
+            {
+                question: "Tôi có thể đi ngang qua một ngôi nhà mà không cần bước qua cửa hoặc cửa sổ. Điều đó là có thể bởi vì tôi là gì?",
+                answer: "Đường ống nước"
+            },
+            {
+                question: "Tôi đeo trong tai, và khi bạn sử dụng tôi, bạn sẽ nghe thấy những âm thanh khác biệt. Tôi là gì?",
+                answer: "Tai nghe"
+            },
+            {
+                question: "Mỗi khi bạn nói tên của tôi, bạn đã phá vỡ tôi. Tôi là gì?",
+                answer: "Im lặng"
+            },
+            {
+                question: "Tôi có thể bay mà không có cánh, tôi có thể lăn mà không có chân. Tôi là gì?",
+                answer: "Sóng"
+            },
+            {
+                question: "Tôi đứng ở giữa Trái Đất và tận cùng của không gian. Tôi là gì?",
+                answer: "Chữ “a”"
+            },
+            {
+                question: "Tôi có rất nhiều lá, nhưng không thể viết được một từ nào. Tôi là gì?",
+                answer: "Cây"
+            },
+            {
+                question: "Có một ngôi nhà màu đỏ, nếu nó chạy, nó sẽ trở thành màu tím. Đó là gì?",
+                answer: "Nền giấy tường"
+            },
+            {
+                question: "Tôi có thể bay mà không cần cánh, tôi có thể chết nhưng không phải là con vật. Tôi là gì?",
+                answer: "Tiếng hát"
+            },
+            {
+                question: "Tôi rất dài khi tôi còn trẻ, nhưng rất ngắn khi tôi già. Tôi là gì?",
+                answer: "Gươm"
+            },
+            {
+                question: "Tôi là thứ không ai muốn có, nhưng không thể sống thiếu. Tôi là gì?",
+                answer: "Rắn rết"
+            },
+            {
+                question: "Tôi có thể đi xuyên qua trong khi tôi đứng yên, và không ai muốn biết đến tôi khi tôi đã đến. Tôi là gì?",
+                answer: "Cái chết"
+            },
+            {
+                question: "Tôi có nút nhưng không phải là áo, tôi có rễ nhưng không phải là cây. Tôi là gì?",
+                answer: "Đồng hồ"
+            },
+            {
+                question: "Tôi có thể được trồng nhưng không phải là hạt giống, tôi có thể được cắt nhưng không phải là thức ăn. Tôi là gì?",
+                answer: "Tóc"
+            },
+            {
+                question: "Tôi có thể chạy nhưng không thể đi, tôi có rất nhiều người bạn nhưng không phải là con người. Tôi là gì?",
+                answer: "Xe hơi"
+            },
+            {
+                question: "Tôi có mắt nhưng không thể nhìn thấy, tôi có nút nhưng không thể nút, tôi có mũi nhưng không thể ngửi. Tôi là gì?",
+                answer: "Kim cương"
+            },
+            {
+                question: "Tôi có thể bay mà không có cánh, tôi có thể rơi mà không có chân. Tôi là gì?",
+                answer: "Tuyết"
+            },
+            {
+                question: "Tôi có thể thay đổi màu sắc tùy thuộc vào trạng thái tâm trạng của bạn. Tôi là gì?",
+                answer: "Gương"
+            },
+            {
+                question: "Tôi có mắt nhưng không thể nhìn, tôi có mũi nhưng không thể ngửi. Tôi là gì?",
+                answer: "Chuột máy tính"
+            },
+            {
+                question: "Tôi có thể làm nước mắt chảy mà không khóc, tôi có thể làm nụ cười hiện ra mà không cười. Tôi là gì?",
+                answer: "Máy ảnh"
+            },
+            {
+                question: "Tôi có thể bay mà không có cánh, tôi có thể chết mà không phải là con người. Tôi là gì?",
+                answer: "Lá"
+            },
+            {
+                question: "Tôi có thể nhìn qua tường nhưng không phải là kính. Tôi là gì?",
+                answer: "Ống nhòm"
+            },
+            {
+                question: "Tôi có thể đi nhưng không có chân, tôi có thể lạc nhưng không phải là con người. Tôi là gì?",
+                answer: "Bản đồ"
+            },
+            {
+                question: "Tôi có thể thay đổi hình dạng nhưng không phải là chất lỏng. Tôi là gì?",
+                answer: "Mặt nạ"
+            },
+            {
+                question: "Tôi có thể làm nổi bật mà không có màu sắc, tôi có thể che giấu mà không thể nhìn thấy. Tôi là gì?",
+                answer: "Mùi hương"
+            },
+            {
+                question: "Tôi có thể làm nóng mà không phải là lửa, tôi có thể làm lạnh mà không phải là đá. Tôi là gì?",
+                answer: "Đun nước"
+            },
+            {
+                question: "Tôi có thể được tìm thấy trong mùa xuân nhưng không thể được tìm thấy trong mùa hè. Tôi là gì?",
+                answer: "Chữ “S”"
+            },
+            {
+                question: "Tôi có thể chạy nhưng không thể đi, tôi có thể nói nhưng không thể nói chuyện. Tôi là gì?",
+                answer: "Máy tính"
+            },
+            {
+                question: "Tôi có thể được nhìn thấy qua một cái cửa nhưng không thể đi qua. Tôi là gì?",
+                answer: "Tranh"
+            },
+            {
+                question: "Tôi có thể được truyền đi nhưng không thể được nhận lại. Tôi là gì?",
+                answer: "Tin nhắn"
+            },
+            {
+                question: "Tôi có thể rất mỏng nhưng càng lớn, tôi càng mất đi. Tôi là gì?",
+                answer: "Tóc"
+            },
+            {
+                question: "Tôi có thể chạy nhưng không thể đi, tôi có thể lên nhưng không thể xuống. Tôi là gì?",
+                answer: "Thang máy"
+            },
+            {
+                question: "Tôi có thể được đếm nhưng không thể đo. Tôi là gì?",
+                answer: "Thời gian"
+            },
+            {
+                question: "Tôi có thể được làm mà không bao giờ được mua. Tôi là gì?",
+                answer: "Mồ hôi"
+            },
+            {
+                question: "Tôi có thể được đánh nhưng không thể được nhìn thấy. Tôi là gì?",
+                answer: "Trái tim"
+            },
+            {
+                question: "Tôi có thể bay nhưng không phải là con chim, tôi có thể nhảy nhưng không phải là con thỏ. Tôi là gì?",
+                answer: "Bóng bay"
+            },
+            {
+                question: "Tôi có thể được cầm nhưng không thể được nắm bắt. Tôi là gì?",
+                answer: "Hơi thở"
+            },
+            {
+                question: "Tôi có thể được ghi nhớ nhưng không thể được nhìn thấy. Tôi là gì?",
+                answer: "Mơ"
+            },
+            {
+                question: "Tôi có thể được mua nhưng không thể được dùng. Tôi là gì?",
+                answer: "Suất học bổng"
+            },
+            {
+                question: "Tôi có thể rất nhanh nhưng không thể chạy, tôi có thể rất chậm nhưng không thể đứng yên. Tôi là gì?",
+                answer: "Thời gian"
+            },
+            {
+                question: "Tôi có thể được mở nhưng không thể được đóng lại. Tôi là gì?",
+                answer: "Mắt"
+            },
+            {
+                question: "Tôi có thể được đốt nhưng không thể được đút lửa. Tôi là gì?",
+                answer: "Quyển sách"
+            },
+            {
+                question: "Tôi có thể được phân nhỏ nhưng không thể được ghép lại. Tôi là gì?",
+                answer: "Quả trứng"
+            },
+            {
+                question: "Tôi có thể được chế biến nhưng không thể được ăn. Tôi là gì?",
+                answer: "Gỗ"
+            },
+            {
+                question: "Tôi có thể được kéo dài nhưng không thể được cắt bỏ. Tôi là gì?",
+                answer: "Máy móc"
+            },
+            {
+                question: "Một vật mình vàng mặc áo cánh tiên, ngày năm bảy vợ, nửa đêm la làng. Là gì?",
+                answer: "Con gà trống"
+            },
+            {
+                question: "Con gì có chân nhưng không biết đi?",
+                answer: "Con nít (trẻ sơ sinh)"
+            },
+            {
+                question: "Chim gì nặng 10kg?",
+                answer: "Chim yến"
+            },
+            {
+                question: "Đứng thì thấp, ngồi thì cao?",
+                answer: "Con chó"
+            },
+            {
+                question: "Chân gì không đi được?",
+                answer: "Chân đèn, chân tường, chân dung, chân trời, chân bàn, chân ghế, chân không, chân váy …"
+            },
+            {
+                question: "Đường gì không đi được?",
+                answer: "Đường ăn, đường cát, đường đời, đường lên cung trăng, đường trong tranh vẽ ..."
+            },
+            {
+                question: "Nắng lửa mưa dầu tôi đâu bỏ bạn. Tối lửa tắt đèn sao bạn lại bỏ tôi. Đó là cái gì?",
+                answer: "Cái bóng"
+            },
+            {
+                question: "Biển gì không có sóng?",
+                answer: "Biển báo, biển số xe, biển quảng cáo …"
+            },
+            {
+                question: "Là chân nhưng không có chân - Là gì?",
+                answer: "Chân trời, chân không"
+            },
+            {
+                question: "Bông gì không nở?",
+                answer: "Bông tai, bông lan, bông gòn …"
+            },
+            {
+                question: "Bánh gì ăn cả thúng vẫn kêu chưa vừa?",
+                answer: "Bánh ít"
+            },
+            {
+                question: "Con gì hai đầu chín đuôi?",
+                answer: "Con số 29"
+            },
+            {
+                question: "Đuôi thì chẳng thấy, mà có hai đầu?",
+                answer: "Cây cầu"
+            },
+            {
+                question: "Con gì ăn lửa với nước than?",
+                answer: "Con tàu"
+            },
+            {
+                question: "Cái gì không có chân, không có đuôi, không có cơ thể mà có nhiều đầu?",
+                answer: "Cầu truyền hình"
+            },
+            {
+                question: "Có 1 chiếc thuyền tối đa là chỉ chở được hai người, nếu thêm người thứ 3 sẽ bị chìm ngay lập tức. Hỏi tại sao người ta trông thấy trên chiếc thuyền đó có ba thằng Mỹ đen và ba thằng Mỹ trắng ngồi trên chiếc thuyền đó mà ko bị chìm?",
+                answer: "Bởi vì trên chiếc thuyền đó sự thật là có đúng 2 người đi. Đó là ba của thằng Mỹ đen và ba của thằng Mỹ trắng."
+            },
+            {
+                question: "Nắng ba năm tôi không bỏ bạn, mưa 1 ngày sao bạn lại bỏ tôi là cái gì?",
+                answer: "Cái bóng của mình"
+            },
+            {
+                question: "Trên nhấp dưới giật là đang làm gì?",
+                answer: "Đang câu cá"
+            },
+            {
+                question: "Bánh gì nghe tên đã thấy sung sướng?",
+                answer: "Bánh Khoái (một loại bánh có nguồn gốc từ Huế)"
+            },
+            {
+                question: "Thứ gì mỗi ngày phải gỡ ra mới có công dụng?",
+                answer: "Lịch treo tường"
+            },
+            {
+                question: "Con gì đầu dê mình ốc?",
+                answer: "Con dốc"
+            },
+            {
+                question: "Cái gì bằng cái vung, vùng xuống ao, đào chẳng thấy, lấy chẳng được?",
+                answer: "Mặt trăng"
+            },
+            {
+                question: "Cái gì khi xài thì quăng đi, nhưng khi không xài thì lấy lại?",
+                answer: "Mỏ neo và lưỡi câu"
+            },
+            {
+                question: "Có 1 bà không biết bơi, xuống nước là bả chết. Một hôm bà đi tàu, bỗng nhiên tàu chìm, nhưng bà không chết. Tại sao?",
+                answer: "Bà đi tàu ngầm"
+            },
+            {
+                question: "Từ gì bỏ đầu thành tên quốc gia, mất đuôi ra một loài chim?",
+                answer: "Từ \"Cúc\" (Bỏ C thành Úc, bỏ C thành Cú)"
+            },
+            {
+                question: "Cắm vào run rẩy toàn thân / Rút ra nước chảy từ chân xuống sàn / Hỡi chàng công tử giàu sang / Cắm vào xin chớ vội vàng rút ra là cái gì?",
+                answer: "Cái tủ lạnh"
+            },
+            {
+                question: "Có 1 người đứng ở chân cầu. Ở giữa cầu có một con gấu rất hung dữ không cho ai qua cầu hết. Người đó sẽ mất hết 5 phút để đi từ chân cầu cho đến giữa cầu và con gấu cũng chỉ ngủ có 5 phút là tỉnh dậy. Hỏi người đó làm sao để qua được bên kia?",
+                answer: "Đi đến giữa cầu và quay mặt ngược lại. Con gấu thức dậy tưởng người đó từ bên kia qua nên rượt trở lại. Thế là người đó đã qua được cầu!"
+            },
+            {
+                question: "Cái gì có thân mà không có đầu, có tiếng mà không có miệng?",
+                answer: "Cái bóng"
+            },
+            {
+                question: "Cái gì càng cất lại càng thấy?",
+                answer: "Cất nhà"
+            },
+            {
+                question: "Nơi nào có đường xá nhưng không có xe cộ, có nhà ở nhưng không có người, có siêu thị, công ty nhưng không có hàng hóa. Đó là nơi nào vậy?",
+                answer: "Bản đồ"
+            },
+            {
+                question: "Cái gì có lông mà không bay, có mỏ mà không mổ?",
+                answer: "Bút lông"
+            },
+            {
+                question: "Đang yêu mà người yêu chết gọi là tình?",
+                answer: "Tình tang"
+            },
+            {
+                question: "Có 1 con trâu, đầu nó thì hướng về hướng mặt trời mọc, nó quay trái 2 vòng sau đó quay ngược lại sau đó lại quay phải hai vòng hỏi cái đuôi của nó chỉ hướng nào?",
+                answer: "Chỉ xuống đất"
+            },
+            {
+                question: "Một người năm nay đã 40 tuổi. Hỏi người đó có bao nhiêu ngày sinh nhật?",
+                answer: "1 ngày"
+            },
+            {
+                question: "Từ gì mà 100% nguời dân Việt Nam đều phát âm sai?",
+                answer: "Từ \"Sai\""
+            },
+            {
+                question: "Một xương sống, một đống xương sườn là cái gì?",
+                answer: "Cái lược"
             },
             {
                 question: "Tại sao khi bắn súng người ta lại nhắm một mắt?",
-                answer: "Nhắm 2 mắt thì sẽ không thấy đường để bắn."
+                answer: "Nhắm cả hai mắt thì không nhìn thấy mục tiêu bắn"
             },
             {
-                question: "Loại nước giải khát nào chứa sắt và canxi?",
-                answer: "Cafe (ca: canxi, Fe: sắt)."
+                question: "Một người đàn ông đi trong trời mưa. Đầu, mắt, mũi, miệng ông ta đều bị ướt nhưng tóc ông ta không hề bị ướt tại sao?",
+                answer: "Trọc đầu"
             },
             {
-                question: "Trong 12 con giáp, con gì nổi tiếng nhờ phụ nữ?",
-                answer: "Con dê"
-            },
-            {
-                question: "Một ly thuỷ tinh đựng đầy nước, làm thế nào để lấy nước dưới đáy ly mà không đổ nước ra ngoài?",
-                answer: "Dùng ống hút."
-            },
-            {
-                question: "Cái gì đánh cha, đánh má, đánh anh, đánh chị, đánh em?",
-                answer: "Bàn chải đánh răng."
-            },
-            {
-                question: "Nếu chỉ có một que diêm, trong một ngày mùa đông giá rét, bạn bước vào căn phòng có một cây đèn, một bếp dầu, và một bếp củi, bạn thắp gì trước tiên?",
-                answer: "Que diêm."
-            },
-            {
-                question: "Cái gì tay trái cầm được còn tay phải cầm không được?",
-                answer: "Tay phải."
-            },
-            {
-                question: "Cái gì phụ nữ thích cầm nhất của đàn ông ?",
-                answer: "Tiền lương của chồng"
-            },
-            {
-                question: "Một kẻ giết người bị kết án tử hình. Hắn ta phải chọn một trong ba căn phòng: Phòng thứ nhất lửa cháy dữ dội, Phòng thứ hai đầy những kẻ ám sát đang giương súng, và phòng thứ ba đầy sư tử nhịn đói trong ba năm. Phòng nào an toàn nhất cho hắn?",
-                answer: "Phòng 3 vì sư tử chết hết vì đói rồi."
-            },
-            {
-                question: "Cái gì Adam có 2 mà Eva chỉ có 1?",
-                answer: "Chữ “A”"
-            },
-            {
-                question: "Quốc gia nào trên thế giới không có chị em phụ nữ?",
-                answer: "Nước Anh."
-            },
-            {
-                question: "Xã đông nhất là xã nào?",
-                answer: "Xã hội."
-            },
-            {
-                question: "Khi Beckham thực hiện quả đá phạt đền, anh ta sẽ sút vào đâu?",
-                answer: "Trái banh."
-            },
-            {
-                question: "Có 1 anh chàng làm việc trong 1 tòa nhà 50 tầng, nhưng anh ta lại chỉ đi thang máy lên đến tầng 35 rồi đoạn còn lại anh ta đi thang bộ. Tại sao anh ta lại làm như vậy ?",
-                answer: "Vì cái thang máy đó không lên được tới tầng 50."
-            },
-            {
-                question: "Lịch nào dài nhất?",
-                answer: "Lịch sử."
+                question: "Bằng gì khó cãi luyên thuyên?",
+                answer: "Bằng chứng"
             },
             {
                 question: "Cái gì người mua biết, người bán biết, người xài không bao giờ biết?",
-                answer: "Quan tài."
+                answer: "Quan tài"
+            },
+            {
+                question: "Cái gì có thân mà không có đầu, có tiếng mà không có miệng?",
+                answer: "Cái bóng"
+            },
+            {
+                question: "Sở thú bị cháy, con gì chạy ra đầu tiên?",
+                answer: "Con người"
+            },
+            {
+                question: "Hai người đào trong hai giờ thì được một cái hố. Vậy hỏi một người đào trong một giờ thì được mấy cái hố?",
+                answer: "1 cái hố"
+            },
+            {
+                question: "Trong 1 cuộc thi chạy, nếu bạn vượt qua người thứ 2 bạn sẽ đứng thứ mấy?",
+                answer: "Thứ 2"
+            },
+            {
+                question: "Tại sao con chó không cắn được đuôi của mình.",
+                answer: "Đuôi chó không đủ dài"
+            },
+            {
+                question: "Cái chi bằng cái cổ cò / Ăn ba bốn rú (núi) chẳng no cái diều",
+                answer: "Cái rựa"
+            },
+            {
+                question: "Vua hôn gọi là gì?",
+                answer: "Hoàng hôn"
+            },
+            {
+                question: "Cái gì càng đun càng nguội?",
+                answer: "Nước đá"
             },
             {
                 question: "Làm sao để cái cân tự cân chính nó?",
-                answer: "Lật ngược cái cân lại."
+                answer: "Lật ngược cái cân lại"
             },
             {
-                question: "Con trai có gì quý nhất?",
-                answer: "Ngọc trai."
+                question: "Ai có nhà di động đầu tiên?",
+                answer: "Rùa và ốc sên"
             },
             {
-                question: "Ở đâu 30 người đàn ông và 2 người đàn bà đánh nhau tán loạn?",
-                answer: "Trên bàn cờ vua"
+                question: "Tại sao 30 người đàn ông và 2 người đàn bà đánh nhau tán loạn?",
+                answer: "Chơi cờ vua (32 quân cờ)"
             },
             {
-                question: "Bạn có thể kể ra ba ngày liên tiếp mà không có tên là thứ hai, thứ ba, thứ tư, thứ năm, thứ sáu, thứ bảy, chủ nhật?",
-                answer: "Hôm qua, hôm nay và ngày mai."
+                question: "Hãy chứng minh 4 : 3 = 2",
+                answer: "4 : 3 có nghĩa là tứ chia tam, đọc ngược lại là tám chia tư là 8 : 4 = 2"
             },
             {
-                question: "Có bao nhiêu chữ C trong câu sau đây: “Cơm, canh, cháo gì tớ cũng thích ăn!”",
-                answer: "1 chữ C, ở chữ “Cơm”."
+                question: "Câu chữ nào mà những người vui sướng khi nhìn thấy nó sẽ trở nên buồn bã và ngược lại, những người buồn bã u sầu khi thấy nó sẽ trở nên vui vẻ hơn.",
+                answer: "Điều đó rồi cũng qua"
             },
             {
-                question: "Cái gì đen khi bạn mua nó, đỏ khi dùng nó và xám xịt khi vứt nó đi?",
-                answer: "Than."
+                question: "Có bao nhiêu chữ C trong câu sau đây: \"Cơm, canh, cháo gì tớ cũng thích ăn!\"",
+                answer: "1 chữ C, ở chữ \"Cơm\""
             },
             {
-                question: "Con gì không gáy ò ó o mà người ta vẫn gọi là gà?",
-                answer: "Gà con và gà mái."
+                question: "Cái gì càng đầy càng nhẹ?",
+                answer: "Khí cầu"
             },
             {
-                question: "Có một cây cầu có trọng tải là 10 tấn, có nghĩa là nếu vượt quá trọng tải trên 10 tấn thì cây cầu sẽ sập... Vậy đố các bạn làm sao bác tài qua được cây cầu này (Không được bớt hàng ra khỏi xe)?",
-                answer: "Bác tài cứ đi qua thôi, còn xe thì ở lại."
+                question: "Chứng minh: Con gái bằng con dê",
+                answer: "Con gái = thần tiên = tiền thân = trước khỉ = con dê (câu đố vui)"
             },
             {
-                question: "Cái gì con gái có, phụ nữ có chồng thì mất?",
-                answer: "Tự do"
+                question: "Hôn con heo trong nhà gọi là gì?",
+                answer: "Hôn thú"
             },
             {
-                question: "Con đường dài nhất là đường nào?",
-                answer: "Đường đời."
+                question: "Cái gì càng gãi càng ngứa?",
+                answer: "Vết thương"
             },
             {
-                question: "Từ nào trong tiếng việt có 9 chữ h?",
-                answer: "Chính."
+                question: "Loại nước giải khát nào chứa sắt và canxi?",
+                answer: "Cafe (Canxi: Ca, Sắt: Fe)"
             },
             {
-                question: "Cơ quan quan trọng nhất của phụ nữ là gì ?",
-                answer: "Hội Liên Hiệp Phụ Nữ."
+                question: "Rất thích hôn gọi là gì?",
+                answer: "Kết hôn"
             },
             {
-                question: "Bệnh gì bác sỹ bó tay?",
-                answer: "Đó là bệnh… gãy tay!"
+                question: "Hôn mà bị hôn lại gọi là gì?",
+                answer: "Đính hôn"
             },
             {
-                question: "2 con vịt đi trước 2 con vịt, 2 con vịt đi sau 2 con vịt, 2 con vịt đi giữa 2 con vịt. Hỏi có mấy con vịt?",
-                answer: "4 con vịt."
+                question: "Của tôi, tôi để đầu hè / Xăm xăm anh đến anh đè lấy tôi / Không cho tội lắm anh ơi / Cho rồi ướt át thân tôi thế nầy",
+                answer: "Cục đá mài"
+            },
+            {
+                question: "Ai cũng biết đỉnh núi Everest cao nhất thế giới, vậy trước khi đỉnh Everest được khám phá, đỉnh núi nào cao nhất thế giới?",
+                answer: "Everest"
+            },
+            {
+                question: "Của mình mình chẳng hay dùng / Người ta cẩn trọng, nằm lòng nhớ kêu",
+                answer: "Tên"
+            },
+            {
+                question: "Cái gì to bằng cái nhà, chỉ có một cửa, người ra vào phải cúi đầu?",
+                answer: "Cái áo"
+            },
+            {
+                question: "Cổ cao hai ngấn miệng tròn / Đói no ngày tháng bị mòn cả trôn",
+                answer: "Cái nồi đất"
+            },
+            {
+                question: "Cái gì của người con gái lúc nào cũng ẩm ướt?",
+                answer: "Cái lưỡi"
+            },
+            {
+                question: "Cái gì ngày đi đêm về, không ai mời mà vẫn đến?",
+                answer: "Cái bóng"
+            },
+            {
+                question: "Có 2 USD (tiền giấy loại 1 USD) trong cả 2 chiếc ví. Nhưng có một chiếc ví có số tiền gấp đôi chiếc ví còn lại. Làm sao điều này có thể xảy ra?",
+                answer: "Mỗi ví có 1 USD và chiếc ví này nằm trong chiếc ví kia"
+            },
+            {
+                question: "Cái gì đánh cha, đánh má, đánh anh, đánh chị, đánh em?",
+                answer: "Bàn chải đánh răng"
+            },
+            {
+                question: "Bệnh gì bác sĩ bó tay?",
+                answer: "Bệnh gãy tay"
+            },
+            {
+                question: "5 : 3 = 2 khi nào?",
+                answer: "Khi ta làm sai"
+            },
+            {
+                question: "Cái gì có miệng mà không biết nói, có lưỡi mà không biết liếm?",
+                answer: "Cái bát"
+            },
+            {
+                question: "Cái gì đen như than, rơi xuống nước lại tan?",
+                answer: "Bóng râm"
+            },
+            {
+                question: "Cái gì đi đằng trước, lùi đằng sau?",
+                answer: "Cái lưỡi"
+            },
+            {
+                question: "Con gì ăn no bụng to, ăn đói bụng bé?",
+                answer: "Con lợn"
+            },
+            {
+                question: "Cái gì không mang vác mà vẫn nặng, không ăn mà vẫn no?",
+                answer: "Cái bụng"
+            },
+            {
+                question: "Trong một cuộc đua, bạn vừa chạy qua người cuối cùng. Vậy bạn đang ở vị trí nào?",
+                answer: "Cuối cùng (Nếu bạn vượt qua người cuối cùng, thì người đó không còn là cuối cùng nữa)"
+            },
+            {
+                question: "Hai đầu tròn rất giống nhau ở giữa có sợi, sợi màu dài ghê là cái gì?",
+                answer: "Cuộn chỉ"
+            },
+            {
+                question: "Con gì dài lắm. Đầy nước trong lòng. Nước trôi theo dòng. Đổ ra biển cả là cái gì?",
+                answer: "Con sông"
+            },
+            {
+                question: "Miệng tròn có mũ mới vui. Thổi cơm rất giỏi ai ơi cái gì?",
+                answer: "Nồi cơm điện"
+            },
+            {
+                question: "Người đi trước. Kẻ đi sau. Nối đuôi nhau. Trên đường phố là cái gì?",
+                answer: "Bánh xe"
+            },
+            {
+                question: "Cái gì càng thiu càng ngon?",
+                answer: "Giấc ngủ"
+            },
+            {
+                question: "Có 3 thằng lùn xếp hàng dọc đi vào hang. Thằng đi sau cầm 1 cái xô, thằng đi giữa cầm 1 cái xẻng, hỏi thằng đi trước cầm gì?",
+                answer: "Cầm đầu"
+            },
+            {
+                question: "Một thân lại có hai chân. Một chân đứng, một chân quay vòng là cái gì",
+                answer: "Com pa"
             },
         ];
 
@@ -367,7 +887,7 @@
             // Luôn hiển thị câu hỏi ban đầu
             mainTextEl.textContent = currentItem.question;
             
-            // Cập nhật thanh tiến trình (Chỉ thay đổi khi chuyển câu hỏi)
+            // Cập nhật thanh tiến trình 
             const progress = (currentQuestionIndex / quizData.length) * 100;
             progressFill.style.width = `${progress}%`;
 
@@ -522,5 +1042,3 @@
     </script>
 </body>
 </html>
-
-
